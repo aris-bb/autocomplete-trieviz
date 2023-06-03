@@ -1,0 +1,60 @@
+<div class="md:hidden flex justify-center items-center">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="currentColor"
+				class="w-6 h-6 text-neutral-200"
+			>
+				<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+			</svg>
+		</div>
+
+
+
+----
+
+				<button
+					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full rounded-l-none border mt-2"
+					on:click={toggleMatches}
+				>
+					<div class="flex items-center">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 24 24"
+							fill="currentColor"
+							class="w-6 h-6 mr-2"
+						>
+							<path
+								fill-rule="evenodd"
+								d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z"
+								clip-rule="evenodd"
+							/>
+						</svg>
+
+						<span>{showMatches ? "Hide" : "Show"} Matches</span>
+					</div>
+				</button>
+
+
+				{#if showMatches}
+				<!-- print the matches as json -->
+				<pre class="text-white">{JSON.stringify(matches, null, 2)}</pre>
+
+				{#if matches.length > 0}
+					<ul class="mt-2">
+						{#each matches as match}
+							<li
+								class="cursor-pointer hover:bg-gray-200 p-2"
+								on:click={() => {
+									input = match;
+									updateMatches();
+								}}
+							>
+								{match}
+							</li>
+						{/each}
+					</ul>
+				{/if}
+			{/if}
