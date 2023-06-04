@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	import { TrieClass } from './trie';
+	import { Trie } from './trie';
 
 	import MagnifyingGlassIcon from '../icons/MagnifyingGlassIcon.svelte';
 	import PlusIcon from '../icons/PlusIcon.svelte';
@@ -10,32 +10,45 @@
 	import ChevronUpIcon from '../icons/ChevronUpIcon.svelte';
 	import ChevronDownIcon from '../icons/ChevronDownIcon.svelte';
 	import XMarkIcon from '../icons/XMarkIcon.svelte';
+	import { children } from 'svelte/internal';
+	import Node from './Node.svelte';
 
-	let trie = new TrieClass();
+	let trie = new Trie();
 	let input = '';
 	let matches: string | any[] = [];
 
 	function clear() {
-		trie = new TrieClass();
+		trie = new Trie();
 		matches = [];
 		input = '';
 		showMatches = false;
 	}
 
 	function randomPopulate() {
-		trie = new TrieClass();
+		trie = new Trie();
 	}
 
 	function add() {
-		trie.add(input);
-		// update the trie
-		trie = trie;
+		trie.addWord(input).then(() => {
+			// update the trie
+			trie = trie;
+		});
 		input = '';
 		matches = [];
 	}
 
+	function remove(word: string) {
+		trie.removeWord(word).then(() => {
+			// update the trie
+			trie = trie;
+			updateMatches();
+		});
+	}
+
 	function updateMatches() {
-		matches = trie.autocomplete(input);
+		trie.autocomplete(input).then((res) => {
+			matches = res;
+		});
 	}
 
 	let showMatches = false;
@@ -60,7 +73,48 @@
 	}
 	window.addEventListener('resize', checkMd);
 	checkMd();
+
+	// just an example tree
+	// class Node {
+	// 	value: string;
+	// 	children: Node[];
+	// 	constructor(value: string) {
+	// 		this.value = value;
+	// 		this.children = [];
+	// 	}
+	// }
+
+	// const exampleTree = new Node('root');
+
+	// // add some children
+	// exampleTree.children.push(new Node('child1'));
+	// exampleTree.children.push(new Node('child2'));
+	// exampleTree.children.push(new Node('child3'));
+
+	// // add some children to child1
+	// exampleTree.children[0].children.push(new Node('child1.1'));
+	// exampleTree.children[0].children.push(new Node('child1.2'));
+	// exampleTree.children[0].children.push(new Node('child1.3'));
+
+	// // add some children to child2
+	// exampleTree.children[1].children.push(new Node('child2.1'));
+	// exampleTree.children[1].children.push(new Node('child2.2'));
+	// exampleTree.children[1].children.push(new Node('child2.3'));
+
+	// // add some children to child3
+	// exampleTree.children[2].children.push(new Node('child3.1'));
+	// exampleTree.children[2].children.push(new Node('child3.2'));
+	// exampleTree.children[2].children.push(new Node('child3.3'));
 </script>
+
+<!-- dont add word if its empty string -->
+
+<!-- we can give it some callback which will request a redraw.
+instead of having some animation function in the tree, we can just perform a operation and simply request redraw and itll automatically redraw for us animated
+now we just need to implement some component named Node which will be responsible for drawing the node and its children recursively -->
+
+<!-- make sure we keep children ordered, so we can draw it without messing up order each time
+also use css probably to start root node from top, and have equal width between all child nodes and between the edges of the screen -->
 
 <svelte:head>
 	<title>TrieViz</title>
@@ -174,8 +228,7 @@
 								<button
 									class="text-white absolute right-1 top-1/2 transform -translate-y-1/2"
 									on:click={() => {
-										input = '';
-										updateMatches();
+										remove(match);
 									}}
 								>
 									<div class="flex items-center">
@@ -209,8 +262,7 @@
 									<button
 										class="text-white absolute right-1 top-1/2 transform -translate-y-1/2"
 										on:click={() => {
-											input = '';
-											updateMatches();
+											remove(match);
 										}}
 									>
 										<div class="flex items-center">
@@ -253,6 +305,7 @@
 	<div class="md:w-2/3 p-4 overflow-y-auto bg-black h-full">
 		<!-- only if empty though -->
 		Add a word to the trie to see it visualized.
+		<Node node={trie.root} />
 
 		<!-- print the current trie as json -->
 		<pre class="text-white">{JSON.stringify(trie, null, 2)}</pre>
