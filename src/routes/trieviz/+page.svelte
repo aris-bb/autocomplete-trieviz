@@ -304,17 +304,17 @@ also use css probably to start root node from top, and have equal width between 
 	</div>
 	<div class="md:w-2/3 p-4 overflow-y-auto bg-black h-full">
 		<!-- only if empty though -->
-		Add a word to the trie to see it visualized.
-		<Node node={trie.root} />
+		<!-- Add a word to the trie to see it visualized. -->
+		<!-- <Node node={trie.root} /> -->
 
 		<!-- print the current trie as json -->
-		<pre class="text-white">{JSON.stringify(trie, null, 2)}</pre>
+		<!-- <pre class="text-white">{JSON.stringify(trie, null, 2)}</pre> -->
 
 		<!-- print the matches as json -->
-		<pre class="text-white">{JSON.stringify(matches, null, 2)}</pre>
+		<!-- <pre class="text-white">{JSON.stringify(matches, null, 2)}</pre> -->
 
-		<svg viewBox="0 0 1000 1000">
-			<!-- {#each trie.nodes as node}
+		<!-- <svg viewBox="0 0 1000 1000"> -->
+		<!-- {#each trie.nodes as node}
 				<g transform={`translate(${node.x},${node.y})`}>
 					<circle r="20" fill={highlight(node, input) ? 'red' : 'gray'} />
 					<text text-anchor="middle" y="7">{node.value}</text>
@@ -329,6 +329,72 @@ also use css probably to start root node from top, and have equal width between 
 					stroke="black"
 				/>
 			{/each} -->
-		</svg>
+		<!-- </svg> -->
+
+		<div class="level flex justify-center p-4">
+			<div
+				id="root"
+				class="node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center"
+			/>
+		</div>
+		<div class="level flex justify-center p-4">
+			<div
+				class="node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center"
+			>
+				h
+			</div>
+		</div>
+		<div class="level flex justify-center p-4">
+			<div
+				class="node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center"
+			>
+				e
+			</div>
+		</div>
+		<div class="level flex justify-center p-4">
+			<div
+				class="invisible node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center"
+			/>
+			<div
+				class="node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center"
+			>
+				y
+			</div>
+			<div
+				class="node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center"
+			>
+				l
+			</div>
+		</div>
+		<div class="level flex justify-center p-4">
+			<div
+				class="invisible node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center"
+			/>
+			<div
+				class="invisible node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center"
+			/>
+			<div
+				class="node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center"
+			>
+				l
+			</div>
+		</div>
+		<div class="level flex justify-center p-4">
+			<div
+				class="invisible node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center"
+			/>
+			<div
+				class="invisible node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center"
+			/>
+			<div
+				class="node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center"
+			>
+				o
+			</div>
+		</div>
+
+		<!-- ensure nodes keep their distance no matter what and wont get squished on smaller screens. we want a scrollbar to appear if the screen is too small
+		we can render the edges as a svg. since we already know from and to nodes and the distance between them (since it always stays the same), we can dynamically generate the svg and render it 
+		also after prototyping this html, check to see if we can store this in javascript and have it reflect to html using svelte directives instead of just manipulating the dom directly -->
 	</div>
 </div>
