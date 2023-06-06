@@ -74,37 +74,38 @@
 	window.addEventListener('resize', checkMd);
 	checkMd();
 
-	// just an example tree
-	// class Node {
-	// 	value: string;
-	// 	children: Node[];
-	// 	constructor(value: string) {
-	// 		this.value = value;
-	// 		this.children = [];
-	// 	}
-	// }
+	// convert the trie into a form that can be represented easily from within html
 
-	// const exampleTree = new Node('root');
+	// populate it in a breadth first fashion
+	let trieVisualizationData = [
+		[{ type: 'character', value: '' }],
+		[{ type: 'character', value: 'h' }],
+		[{ type: 'character', value: 'e' }],
+		[
+			{ type: 'character', value: null },
+			{ type: 'character', value: 'y' },
+			{ type: 'character', value: 'l' }
+		],
+		[
+			{ type: 'character', value: null },
+			{ type: 'character', value: null },
+			{ type: 'character', value: 'l' }
+		],
+		[
+			{ type: 'character', value: null },
+			{ type: 'character', value: null },
+			{ type: 'character', value: 'o' }
+		]
+	];
 
-	// // add some children
-	// exampleTree.children.push(new Node('child1'));
-	// exampleTree.children.push(new Node('child2'));
-	// exampleTree.children.push(new Node('child3'));
+	// buff up all rows to be the same length
+	// add an svg edge layer between each row
+	// figure out how to do it relative to the nodes
 
-	// // add some children to child1
-	// exampleTree.children[0].children.push(new Node('child1.1'));
-	// exampleTree.children[0].children.push(new Node('child1.2'));
-	// exampleTree.children[0].children.push(new Node('child1.3'));
+	// can we use plain old html to draw the edges? this would be nice
 
-	// // add some children to child2
-	// exampleTree.children[1].children.push(new Node('child2.1'));
-	// exampleTree.children[1].children.push(new Node('child2.2'));
-	// exampleTree.children[1].children.push(new Node('child2.3'));
-
-	// // add some children to child3
-	// exampleTree.children[2].children.push(new Node('child3.1'));
-	// exampleTree.children[2].children.push(new Node('child3.2'));
-	// exampleTree.children[2].children.push(new Node('child3.3'));
+	// calculate height and rotation and starting/ending point that we need for that given edge
+	// make sure the height, rotation, and starting/ending point are all relative to the node
 </script>
 
 <!-- dont add word if its empty string -->
@@ -331,6 +332,41 @@ also use css probably to start root node from top, and have equal width between 
 			{/each} -->
 		<!-- </svg> -->
 
+		<!-- a svg of a straight line -->
+		<!-- <svg viewBox="0 0 1000 1000">
+			<line x1="0" y1="0" x2="1000" y2="1000" stroke="white" />
+		</svg> -->
+
+		{#each trieVisualizationData as visualizationRow}
+			<div class="level flex justify-center px-4">
+				{#each visualizationRow as node}
+					<div
+						class="node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center {node.value ===
+						null
+							? 'invisible'
+							: ''}"
+					>
+						{node.value}
+					</div>
+				{/each}
+			</div>
+
+			<div class="level flex justify-center px-4">
+				{#each visualizationRow as node}
+					<div
+						class="node mx-4 w-12 h-12 text-white flex items-center justify-center {node.value ===
+						null
+							? 'invisible'
+							: ''}"
+					>
+						<svg viewBox="0 0 10 10" class="w-full h-full">
+							<line x1="5" y1="0" x2="5" y2="10" stroke="white" />
+						</svg>
+					</div>
+				{/each}
+			</div>
+		{/each}
+
 		<div class="level flex justify-center p-4">
 			<div
 				id="root"
@@ -395,6 +431,8 @@ also use css probably to start root node from top, and have equal width between 
 
 		<!-- ensure nodes keep their distance no matter what and wont get squished on smaller screens. we want a scrollbar to appear if the screen is too small
 		we can render the edges as a svg. since we already know from and to nodes and the distance between them (since it always stays the same), we can dynamically generate the svg and render it 
-		also after prototyping this html, check to see if we can store this in javascript and have it reflect to html using svelte directives instead of just manipulating the dom directly -->
+		also after prototyping this html, check to see if we can store this in javascript and have it reflect to html using svelte directives instead of just manipulating the dom directly
+		^ yeah the above should work, just hold a list of list of nodes, each outer iteration will take us down one row, each inner iteration will be the each column, so just group them as such 
+		so we should just have one row of nodes, the next row the edges, then nodes again, so on and so forth. we can calculate svgs while generating this structure -->
 	</div>
 </div>
