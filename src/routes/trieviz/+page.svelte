@@ -83,18 +83,24 @@
 		[{ type: 'character', value: 'e' }],
 		[
 			{ type: 'character', value: null },
+			{ type: 'character', value: null },
 			{ type: 'character', value: 'y' },
-			{ type: 'character', value: 'l' }
+			{ type: 'character', value: 'l' },
+			{ type: 'character', value: 'r' }
 		],
 		[
 			{ type: 'character', value: null },
 			{ type: 'character', value: null },
-			{ type: 'character', value: 'l' }
+			{ type: 'character', value: null },
+			{ type: 'character', value: 'l' },
+			{ type: 'character', value: null }
 		],
 		[
 			{ type: 'character', value: null },
 			{ type: 'character', value: null },
-			{ type: 'character', value: 'o' }
+			{ type: 'character', value: null },
+			{ type: 'character', value: 'o' },
+			{ type: 'character', value: null }
 		]
 	];
 
@@ -106,6 +112,8 @@
 
 	// calculate height and rotation and starting/ending point that we need for that given edge
 	// make sure the height, rotation, and starting/ending point are all relative to the node
+
+	// fix the responsive middle bar between buttons, youtube has this too between their like/dislike buttons
 </script>
 
 <!-- dont add word if its empty string -->
@@ -124,8 +132,10 @@ also use css probably to start root node from top, and have equal width between 
 
 <div class="flex flex-col md:flex-row h-screen overflow-hidden">
 	<div
-		class="md:w-1/3 flex max-h-full flex-col bg-neutral-900 border-b md:border-b-0 md:border-r border-neutral-700"
+		class="md:w-2/3 flex max-h-full flex-col bg-neutral-900 border-b md:border-b-0 md:border-r border-neutral-700 md:max-w-lg"
 	>
+		<!-- add a way to hide this drawer away
+		ensure we have some max width for this -->
 		<div class="flex flex-col xl:flex-col-reverse m-4 mb-2">
 			<div class="mb-4 xl:mb-0 flex justify-between relative">
 				<div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white">
@@ -303,7 +313,7 @@ also use css probably to start root node from top, and have equal width between 
 			</button>
 		{/if}
 	</div>
-	<div class="md:w-2/3 p-4 overflow-y-auto bg-black h-full">
+	<div class="w-full p-4 overflow-y-auto bg-black h-full">
 		<!-- only if empty though -->
 		<!-- Add a word to the trie to see it visualized. -->
 		<!-- <Node node={trie.root} /> -->
@@ -341,7 +351,7 @@ also use css probably to start root node from top, and have equal width between 
 			<div class="level flex justify-center px-4">
 				{#each visualizationRow as node}
 					<div
-						class="node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center {node.value ===
+						class="z-10 node mx-4 bg-neutral-800 shadow-md rounded-full w-12 h-12 text-white border border-neutral-700 flex items-center justify-center {node.value ===
 						null
 							? 'invisible'
 							: ''}"
@@ -354,13 +364,31 @@ also use css probably to start root node from top, and have equal width between 
 			<div class="level flex justify-center px-4">
 				{#each visualizationRow as node}
 					<div
-						class="node mx-4 w-12 h-12 text-white flex items-center justify-center {node.value ===
+						class="relative node mx-4 w-12 h-12 text-white flex items-center justify-center {node.value ===
 						null
 							? 'invisible'
 							: ''}"
 					>
-						<svg viewBox="0 0 10 10" class="w-full h-full">
-							<line x1="5" y1="0" x2="5" y2="10" stroke="white" />
+						<svg class="absolute w-full h-full overflow-visible">
+							<!-- n=0: 0
+							n=1: 64 + 32
+							n=2: 2*64 + 32
+							n: n*64 + (n>1)*32 -->
+							<!-- -16 = leftmost
+							64 = rightmost
+							80 = delta
+							24 = center
+							24 + n*80 = nth node -->
+							<line x1="24" y1="0" x2="104" y2="48" stroke="white" stroke-width="2" />
+						</svg>
+						<svg class="absolute w-full h-full overflow-visible">
+							<line x1="24" y1="0" x2="24" y2="48" stroke="white" stroke-width="2" />
+						</svg>
+						<svg class="absolute w-full h-full overflow-visible">
+							<line x1="24" y1="0" x2="-56" y2="48" stroke="white" stroke-width="2" />
+						</svg>
+						<svg class="absolute w-full h-full overflow-visible">
+							<line x1="24" y1="0" x2="-536" y2="48" stroke="white" stroke-width="2" />
 						</svg>
 					</div>
 				{/each}
